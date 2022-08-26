@@ -14,56 +14,38 @@ Ejemplo:
 1 > 5 | false
 1 > 3 | false
 
-!(1 > 5 && 1 > 3) = 1
+(1 > 5 || 1 > 3) = 0
 
 1 < 5 | true
 1 < 3 | true
 
-!(1 < 5 && 1 < 3) = 0
+(1 < 5 || 1 < 3) = 1
 
-!(1 > 5 && 1 > 3) && !(1 < 5 && 1 < 3) == 0
--------------
+(1 > 5 || 1 > 3) && (1 < 5 || 1 < 3) = 0
+----------------------------------------
 5 > 1 | true
 5 > 3 | true
 
-!(5 > 1 && 5 > 3) = 0
+(5 > 1 || 5 > 3) = 1
 
 5 < 1 | false
 5 < 3 | false
 
-!(5 < 5 && 5 < 3) = 1
+(5 < 5 || 5 < 3) = 0
 
-!(5 > 1 && 5 > 3) && !(5 < 5 && 5 < 3) = 0
--------------
+(5 > 1 && 5 > 3) && (5 < 5 && 5 < 3) = 0
+----------------------------------------
 3 > 1 | true
 3 > 5 | false
 
-!(3 > 1 && 3 > 5) = 1
+(3 > 1 || 3 > 5) = 1
 
 3 < 1 | false
 3 < 5 | true
 
-!(3 < 1 && 3 < 5) = 1
+(3 < 1 || 3 < 5) = 1
 
-!(3 > 1 && 3 > 5) && !(3 < 1 && 3 < 5) = 1
-=============
-3 > 5 | false
-3 > 1 | true
-
-3 < 5 | true
-3 < 1 | false
--------------
-5 > 1 | true
-5 > 3 | true
-
-5 < 1 | false
-5 < 3 | false
--------------
-1 > 5 | false
-1 > 3 | false
-
-1 < 5 | true
-1 < 3 | true
+(3 > 1 || 3 > 5) && (3 < 1 || 3 < 5) = 1
 */
 
 #include <stdio.h>
@@ -73,6 +55,7 @@ int main(void) {
 	setbuf(stdout,NULL);
 
 	int numeroMedio;
+	int bandera = 0;
 	int numeroUno;
 	int numeroDos;
 	int numeroTres;
@@ -86,19 +69,25 @@ int main(void) {
 	printf("Ingrese el tercer numero: ");
 	scanf("%d", &numeroTres);
 
-	if(!(numeroUno > numeroDos && numeroUno > numeroTres) && !(numeroUno < numeroDos && numeroUno < numeroTres)){
+	if((numeroUno > numeroDos || numeroUno > numeroTres) && (numeroUno < numeroDos || numeroUno < numeroTres)){
 		numeroMedio = numeroUno;
+	}else{
+		if((numeroDos > numeroUno || numeroDos > numeroTres) && (numeroDos < numeroUno || numeroDos < numeroTres)){
+			numeroMedio = numeroDos;
+		}else{
+			if((numeroTres > numeroUno || numeroTres > numeroDos) && (numeroTres < numeroUno || numeroTres < numeroDos)){
+				numeroMedio = numeroTres;
+			}else{
+				bandera = 1;
+			}
+		}
 	}
 
-	if(!(numeroDos > numeroUno && numeroDos > numeroTres) && !(numeroDos < numeroUno && numeroDos < numeroTres)){
-		numeroMedio = numeroDos;
+	if(!bandera){
+		printf("El %d es el del medio", numeroMedio);
+	}else{
+		printf("No hay numero del medio");
 	}
-
-	if(!(numeroTres > numeroUno && numeroTres > numeroDos) && !(numeroTres < numeroUno && numeroTres < numeroDos)){
-		numeroMedio = numeroTres;
-	}
-
-	printf("El numero del medio es: %d", numeroMedio);
 
 	return 0;
 }
