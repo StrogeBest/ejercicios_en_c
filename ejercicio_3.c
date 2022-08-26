@@ -69,18 +69,14 @@ int main(void) {
 	printf("Ingrese el tercer numero: ");
 	scanf("%d", &numeroTres);
 
-	if((numeroUno > numeroDos || numeroUno > numeroTres) && (numeroUno < numeroDos || numeroUno < numeroTres)){
+	if( (numeroUno > numeroDos || numeroUno > numeroTres) && (numeroUno < numeroDos || numeroUno < numeroTres) ){
 		numeroMedio = numeroUno;
+	}else if( (numeroDos > numeroUno || numeroDos > numeroTres) && (numeroDos < numeroUno || numeroDos < numeroTres) ){
+		numeroMedio = numeroDos;
+	}else if( (numeroTres > numeroUno || numeroTres > numeroDos) && (numeroTres < numeroUno || numeroTres < numeroDos) ){
+		numeroMedio = numeroTres;
 	}else{
-		if((numeroDos > numeroUno || numeroDos > numeroTres) && (numeroDos < numeroUno || numeroDos < numeroTres)){
-			numeroMedio = numeroDos;
-		}else{
-			if((numeroTres > numeroUno || numeroTres > numeroDos) && (numeroTres < numeroUno || numeroTres < numeroDos)){
-				numeroMedio = numeroTres;
-			}else{
-				bandera = 1;
-			}
-		}
+		bandera = 1;
 	}
 
 	if(!bandera){
