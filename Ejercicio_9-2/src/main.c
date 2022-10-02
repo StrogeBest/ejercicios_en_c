@@ -8,16 +8,18 @@
  ============================================================================
  */
 
-#include "biblioteca.h"
-#include <string.h>
+#include "pedirDatos.h"
 
 #define TAM 51
 #define CANTIDAD_EMPLEADOS 5
 #define CANTIDAD_SECTORES 5
-#define LIBRE 0 // Para el isEmpty
-#define OCUPADO 1 // Para el isEmpty
-#define BAJA -1 // Para el isEmpty
+#define LIBRE 0
+#define OCUPADO 1
+#define BAJA -1
 
+// struct auxiliar para buscar el mayor de todos - No usar SWITCH
+// Una bilioteca por cada estructura
+// struct: Siempre Id y estado
 typedef struct{
 	int idSector;
 	char descripcionSector[TAM];
@@ -25,193 +27,87 @@ typedef struct{
 }eSector;
 
 typedef struct{
-	int id; // Desbordamiento de enteros
-	char name[TAM]; // Desbordamiento de caracteres
+	int id;
+	char name[TAM];
 	char lastName[TAM];
 	float salary;
 	int idSector;
 	int isEmpty;
 }eEmpleado;
 
-eEmpleado crearNuevoEmpleado(int idEmpleado); // eEmpleado tipo de dato al igual como int, void, float, char
-void actualizarEmpleadoPorId(eEmpleado empleados[]); // Aritmetica de punteros
-int validarIdEmpleado(eEmpleado empleados[], int idEmpleado);
-void mostrarEmpleados(eEmpleado empleados[], int idEmpleado);
-int agregarEspaciados(char mensaje[], int cantidadEspacio, char mensajee[]);
+void inicializarEmpleados(eEmpleado empleados, int cantidadEmpleados);
+void crearNuevoEmpleado(eEmpleado empleados, int tam);
 
 int main(void) {
 	setbuf(stdout, NULL);
 
-	eEmpleado empleados[CANTIDAD_EMPLEADOS], empleado;
-	// Datos hardcodeados
-	eSector sectores[CANTIDAD_SECTORES] = {
-			{100, "Sistemas"},
-			{200, "Recursos Humanos"},
-			{300, "Administracion"},
-			{400, "Gerencia"}
-	};
-	int opcion, resultado, idEmpleado = 0;
+	// Creo array de estructura
+	eEmpleado empleados[CANTIDAD_EMPLEADOS];
+	int opcion;
 
-	// Poner 0 a todos los empleados en el isEmpty
-	inicializarEmpleados();
+	// Inicializo array de estructura
+	inicializar(empleados, CANTIDAD_EMPLEADOS);
 
 	do{
-		system("cls");
-		mostrarMenu("\tMenu Principal\n\n1. Nuevo empleado\n2. Actualizar empleado\n3. Eliminar empleado\n4. Lista de empleados\n5. Salir\n\n");
-		opcion = obtenerEnteroRango("Ingrese una opcion: ", 1, 5);
+			system("cls");
+			printf("\tMenu Principal\n\n1. Nuevo empleado\n2. Actualizar empleado\n3. Eliminar empleado\n4. Lista de empleados\n5. Salir\n\n");
+			opcion = obtenerNumeroRango("Ingrese una opcion: ", "El numero debe estar entre 1 y 5. Intentelo de nuevo", 1, 5);
 
-		/*
-		 * Muestra el menu dependiendo de la opcion elegida
-		 */
-		if(resultado){
 			switch(opcion){
 				case 1:
-					system("cls");
-					printf("\tCrear nuevo empleado\n\n");
-					// retorno de la funcion para saber si salio bien(1) o mal(0)
-					empleado = crearNuevoEmpleado(idEmpleado);
-					empleados[idEmpleado] = empleado;
-					idEmpleado++; // Bien
+					crearNuevoEmpleado(empleados, CANTIDAD_EMPLEADOS);
 					break;
 				case 2:
 					system("cls");
 					printf("\tActualizar empleado\n\n");
-					actualizarEmpleadoPorId(empleados);
 					break;
 				case 3:
 					system("cls");
 					printf("\tEliminar empleado\n\n");
-					// No se borran los datos solo cambia el estado - Baja logica
-					actualizarEmpleadoPorId(empleados);
 					break;
 				case 4:
 					system("cls");
 					printf("\tLista de empleados\n\n");
-					mostrarEmpleados(empleados, idEmpleado);
 					break;
 			}
-		}
-	}while(opcion != 5);
+		}while(opcion != 5);
 
 	return EXIT_SUCCESS;
 }
 
-// Lista, max lista, id
-eEmpleado crearNuevoEmpleado(int idEmpleado){
-	eEmpleado empleado;
-
-	empleado.id = idEmpleado;
-
-	pedirCadena("Ingrese su nombre", empleado.name, TAM);
-
-	printf("Ingrese su apellido: ");
-	scanf("%s", empleado.lastName);
-
-	printf("Ingrese su salario: ");
-	scanf("%f", &empleado.salary);
-
-	printf("Ingrese su sector: ");
-	scanf("%d", &empleado.idSector);
-
-	empleado.isEmpty = 1;
-
-	return empleado;
-}
-
-void actualizarEmpleadoPorId(eEmpleado empleados[]){
-	int idEmpleado;
-	int resultado;
-	int opcion;
-
-	printf("Ingrese el ID del empleado: ");
-	scanf("%d", &idEmpleado);
-
-	resultado = validarIdEmpleado(empleados, idEmpleado);
-
-	if(resultado){
-		do{
-			system("cls");
-			printf("\tActualizar empleado con ID %d\n\n", idEmpleado);
-			printf("1. Nombre\n");
-			printf("2. Apellido\n");
-			printf("3. Salario\n");
-			printf("4. Sector\n");
-			printf("5. Salir\n\n");
-
-			resultado = obtenerNumero(&opcion, "Ingrese una opcion: ");
-
-			if(resultado){
-				switch(opcion){
-					case 1:
-						printf("Ingrese su nombre: \n\n");
-						break;
-					case 2:
-						printf("Ingrese su apellido: \n\n");
-						break;
-					case 3:
-						printf("Ingrese su salario: \n\n");
-						break;
-					case 4:
-						printf("Ingrese su sector: \n\n");
-						break;
-				}
-				system("pause");
-			}
-		}while(opcion != 5);
-	}else{
-		printf("El empleado con ID %d no existe. Intentelo de nuevo\n\n", idEmpleado);
-		system("pause");
-	}
-}
-
-int validarIdEmpleado(eEmpleado empleados[], int idEmpleado){
-	int retorno = 0;
-
-	for(int i = 0; i < CANTIDAD_EMPLEADOS; i++){
-		if(empleados[i].id == idEmpleado){
-			retorno = 1;
-			break;
+void inicializarEmpleados(eEmpleado empleados, int cantidadEmpleados){
+	//SI EXISTE EL ARRAY Y EL LIMITE ES VALIDO
+	if (empleados != NULL && cantidadEmpleados > 0) {
+		//RECORRO TODO EL ARRAY
+		for (int i = 0; i < cantidadEmpleados; i++) {
+			//SET ESTADO DE "LIBRE"
+			empleados[i].isEmpty = LIBRE;
 		}
 	}
-
-	return retorno;
 }
 
-void mostrarEmpleados(eEmpleado empleados[], int idEmpleado){
-	char nombre[19];
-	//char numero[3];
-	//char numeroCaracter[4];
+void crearNuevoEmpleado(eEmpleado empleados, int tam){
+	// break Rompe el for mas cercano
+	//printf("%20s"); https://parzibyte.me/blog/2020/04/12/rellenar-alinear-texto-printf/
+	eEmpleado empleado;
+	//int error;
 
-	printf("+-----+--------------------+\n");
-	printf("| ID  | Nombre             |\n");
-	printf("+-----+--------------------+\n");
-	for(int i = 0; i < idEmpleado; i++){
-		agregarEspaciados(empleados[i].name, 19, nombre);
-		/*
-		itoa(empleados[i].id, numero, 10);
-		agregarEspaciados(numero, 4, numeroCaracter);
-		*/
+	system("cls");
+	printf("\tCrear nuevo empleado\n\n");
 
-		printf("| 100 | %s|\n", nombre);
-	}
-	printf("+-----+--------------------+\n\n");
+
+	printf("Se ha creado un nuevo empleado correctamente\n\n");
 	system("pause");
 }
 
-int agregarEspaciados(char mensaje[], int cantidadEspacio, char mensajee[]){
-	int retorno = 0;
-	char textoConEspacios[cantidadEspacio];
-	int cantidad = strlen(mensaje);
+eEmpleado cargarDatos(void){
+	eEmpleado empleado;
 
-	for(int i = 0; i < cantidadEspacio; i++){
-		if(i < cantidad){
-			textoConEspacios[i] = mensaje[i];
-		}else{
-			textoConEspacios[i] = ' ';
-		}
-	}
+	obtenerCadena("Ingrese el nombre: ", "El nombre solo puede tener letras. Intentelo de nuevo", empleado.name, TAM);
+	obtenerCadena("Ingrese el apellido: ", "El apellido solo puede tener letras. Intentelo de nuevo", empleado.name, TAM);
+	empleado.salary = obtenerFlotante("Ingrese el salario: ", "El salario ingresado es incorrecto. Intentelo de nuevo");
+	empleado.idSector = obtenerNumeroPositivo("Ingrese el ID del sector: ", "El ID del sector es incorrecto. Intentelo de nuevo");
+	validarId(empleado.idSector);
 
-	strcpy(mensajee, textoConEspacios);
-
-	return retorno;
+	return empleado;
 }
