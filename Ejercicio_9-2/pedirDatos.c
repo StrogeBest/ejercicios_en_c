@@ -99,7 +99,7 @@ int obtenerNumero(char mensaje[], char mensajeError[]){
 				}
 			}
 		}
-		while(!resultado); /* Si el resultado es 0(NO es un numero valido) vuelvo a pedir un numero */
+		while(!resultado); /* Si es 0(NO es un numero valido) vuelvo a pedir un numero */
 	}
 
 	/* Transformo el numero a entero */
@@ -112,6 +112,7 @@ int obtenerNumeroRango(char mensaje[], char mensajeError[], int minimo, int maxi
 	char numeroIngresado[50];
 	int largoNumero = 50;
 	int numeroValidado;
+	int resultado = 0;
 
 	if(mensaje != NULL && strlen(mensaje) > 0 && mensajeError != NULL && strlen(mensajeError) > 0){
 		do
@@ -134,10 +135,12 @@ int obtenerNumeroRango(char mensaje[], char mensajeError[], int minimo, int maxi
 				if(numeroValidado < minimo || numeroValidado > maximo){
 					printf("%s\n\n", mensajeError);
 					system("pause");
+				}else{
+					resultado = 1;
 				}
 			}
 		}
-		while(!validarNumero(numeroIngresado, 0) || numeroValidado < minimo || numeroValidado > maximo);
+		while(!resultado || numeroValidado < minimo || numeroValidado > maximo);
 	}
 
 	return numeroValidado;
@@ -148,6 +151,7 @@ int obtenerNumeroPositivo(char mensaje[], char mensajeError[]){
 	char numeroIngresado[50];
 	int largoNumero = 50;
 	int numeroValidado;
+	int resultado = 0;
 
 	if(mensaje != NULL && strlen(mensaje) > 0 && mensajeError != NULL && strlen(mensajeError) > 0){
 		do
@@ -170,10 +174,12 @@ int obtenerNumeroPositivo(char mensaje[], char mensajeError[]){
 				if(numeroValidado < 0){
 					printf("%s\n\n", mensajeError);
 					system("pause");
+				}else{
+					resultado = 1;
 				}
 			}
 		}
-		while(!validarNumero(numeroIngresado, 0)); /* Si me devuelve 0(NO es un numero valido) vuelvo a pedir un numero */
+		while(!resultado); /* Si es 0(NO es un numero valido) vuelvo a pedir un numero */
 	}
 
 	return numeroValidado;
@@ -183,6 +189,7 @@ int obtenerNumeroNegativo(char mensaje[], char mensajeError[]){
 	char numeroIngresado[50];
 	int largoNumero = 50;
 	int numeroValidado;
+	int resultado = 0;
 
 	if(mensaje != NULL && strlen(mensaje) > 0 && mensajeError != NULL && strlen(mensajeError) > 0){
 		do
@@ -207,11 +214,13 @@ int obtenerNumeroNegativo(char mensaje[], char mensajeError[]){
 					if(numeroValidado > 0){
 						printf("%s\n\n", mensajeError);
 						system("pause");
+					}else{
+						resultado = 1;
 					}
 				}
 			}
 		}
-		while(!validarNumero(numeroIngresado, 1)); /* Si me devuelve 0(NO es un numero valido) vuelvo a pedir un numero */
+		while(!resultado); /* Si es 0(NO es un numero valido) vuelvo a pedir un numero */
 	}
 
 	return numeroValidado;
