@@ -1,11 +1,3 @@
-/*
- * pedirDatos.h
- *
- *  Created on: 30 sep. 2022
- *      Author: Javier
- */
-
-
 #ifndef PEDIRDATOS_H_
 #define PEDIRDATOS_H_
 
@@ -17,8 +9,9 @@
 
 int validarNumero(char cadena[], int valorInicial);
 int validarNumeroFlotante(char buffer[]);
-int validarCadena(char buffer[]);
+int validarAlfabeto(char buffer[]);
 
+int obtenerNumero(char mensaje[], char mensajeError[]);
 int obtenerNumeroRango(char mensaje[], char mensajeError[], int minimo, int maximo);
 int obtenerNumeroPositivo(char mensaje[], char mensajeError[]);
 int obtenerNumeroNegativo(char mensaje[], char mensajeError[]);
