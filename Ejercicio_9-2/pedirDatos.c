@@ -47,7 +47,7 @@ int validarNumeroFlotante(char cadena[]){
 	return retorno;
 }
 
-int validarCadena(char mensaje[]){
+int validarAlfabeto(char mensaje[]){
 	int retorno = 1;
 
 	if(strlen(mensaje) > 0){
@@ -63,6 +63,49 @@ int validarCadena(char mensaje[]){
 	}
 
 	return retorno;
+}
+
+int obtenerNumero(char mensaje[], char mensajeError[]){
+	char numeroIngresado[50];
+	int largoNumero = 50;
+	int numeroValidado;
+	int resultado = 0;
+
+	if(mensaje != NULL && strlen(mensaje) > 0 && mensajeError != NULL && strlen(mensajeError) > 0){
+		do
+		{
+			/* Pido un numero al usuario */
+			printf("%s", mensaje);
+			fflush(stdin);
+			fgets(numeroIngresado, largoNumero, stdin);
+			numeroIngresado[strlen(numeroIngresado) - 1] = '\0';
+
+			/* Si tiene el simbolo "-" es un numero negativo */
+			if(numeroIngresado[0] == '-'){
+				/* Si me devuelve 0(NO es un numero valido) muestro un mensaje de error */
+				if(!validarNumero(numeroIngresado, 1)){
+					printf("%s no es un numero valido. Intentelo de nuevo\n\n", numeroIngresado);
+					system("pause");
+				}else{
+					resultado = 1;
+				}
+			}else{
+				/* Si me devuelve un 0(NO es un numero valido) muestro un mensaje de error */
+				if(!validarNumero(numeroIngresado, 0)){
+					printf("%s no es un numero valido. Intentelo de nuevo\n\n", numeroIngresado);
+					system("pause");
+				}else{
+					resultado = 1;
+				}
+			}
+		}
+		while(!resultado); /* Si el resultado es 0(NO es un numero valido) vuelvo a pedir un numero */
+	}
+
+	/* Transformo el numero a entero */
+	numeroValidado = atoi(numeroIngresado);
+
+	return numeroValidado;
 }
 
 int obtenerNumeroRango(char mensaje[], char mensajeError[], int minimo, int maximo){
@@ -248,10 +291,10 @@ void obtenerCadena(char mensaje[], char mensajeError[], char nombre[], int largo
 		nombre[strlen(nombre) - 1] = '\0';
 
 		/* Si me devuelve 0(NO es una cadena valida) muestro el mensaje de error */
-		if(!validarCadena(nombre)){
+		if(!validarAlfabeto(nombre)){
 			printf("%s\n\n", mensajeError);
 			system("pause");
 		}
 	}
-	while(!validarCadena(nombre)); /* Si me devuelve 0(NO es un numero valido) vuelvo a pedir texto */
+	while(!validarAlfabeto(nombre)); /* Si me devuelve 0(NO es un numero valido) vuelvo a pedir texto */
 }
