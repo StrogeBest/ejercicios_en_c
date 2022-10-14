@@ -80,23 +80,15 @@ int obtenerNumero(char mensaje[], char mensajeError[]){
 			fgets(numeroIngresado, largoNumero, stdin);
 			numeroIngresado[strlen(numeroIngresado) - 1] = '\0';
 
-			/* Si tiene el simbolo "-" es un numero negativo */
-			if(numeroIngresado[0] == '-'){
-				/* Si me devuelve 0(NO es un numero valido) muestro un mensaje de error */
-				if(!validarNumero(numeroIngresado, 1)){
-					printf("%s no es un numero valido. Intentelo de nuevo\n\n", numeroIngresado);
-					system("pause");
-				}else{
-					resultado = 1;
-				}
+			/* Si tiene el simbolo "-" es un numero negativo, valido los numero y si me devuelve 0(NO es un numero valido) muestro un mensaje de error */
+			if(numeroIngresado[0] == '-' && !validarNumero(numeroIngresado, 1)){
+				printf("%s no es un numero valido. Intentelo de nuevo\n\n", numeroIngresado);
+				system("pause");
+			}else if(!validarNumero(numeroIngresado, 0)){ /* Si me devuelve un 0(NO es un numero valido) muestro un mensaje de error */
+				printf("%s no es un numero valido. Intentelo de nuevo\n\n", numeroIngresado);
+				system("pause");
 			}else{
-				/* Si me devuelve un 0(NO es un numero valido) muestro un mensaje de error */
-				if(!validarNumero(numeroIngresado, 0)){
-					printf("%s no es un numero valido. Intentelo de nuevo\n\n", numeroIngresado);
-					system("pause");
-				}else{
-					resultado = 1;
-				}
+				resultado = 1;
 			}
 		}
 		while(!resultado); /* Si es 0(NO es un numero valido) vuelvo a pedir un numero */
@@ -108,24 +100,29 @@ int obtenerNumero(char mensaje[], char mensajeError[]){
 	return numeroValidado;
 }
 
-int obtenerNumeroRango(char mensaje[], char mensajeError[], int minimo, int maximo){
+int obtenerNumeroRango(char* mensaje, char* mensajeError, int minimo, int maximo){
 	char numeroIngresado[50];
 	int largoNumero = 50;
 	int numeroValidado;
 	int resultado = 0;
 
 	if(mensaje != NULL && strlen(mensaje) > 0 && mensajeError != NULL && strlen(mensajeError) > 0){
-		do
-		{
+		do{
 			/* Pido un numero al usuario */
 			printf("%s", mensaje);
 			fflush(stdin);
 			fgets(numeroIngresado, largoNumero, stdin);
-			numeroIngresado[strlen(numeroIngresado) - 1] = '\0';
+			*(numeroIngresado + (strlen(numeroIngresado) - 1)) = '\0';
 
-			/* Si me devuelve un 0(NO es un numero valido) muestro un mensaje de error */
-			if(!validarNumero(numeroIngresado, 0)){
-				printf("%s no es un numero valido. Intentelo de nuevo\n\n", numeroIngresado);
+			/*
+				Si el primer caracter es el "-" es negativo y valido el numero si me devuelve un
+				0(NO es un numero negativo valido) muestro un mensaje de error.
+			*/
+			if(*(mensaje + 0) == '-' && !validarNumero(numeroIngresado, 1)){
+				printf("%s no es una numero entero valido. Intentelo de nuevo\n\n", numeroIngresado);
+				system("pause");
+			}else if(!validarNumero(numeroIngresado, 1)){ /* Si me devuelve un 0(NO es un numero positivo valido) muestro un mensaje de error */
+				printf("%s no es un numero entero valido. Intentelo de nuevo\n\n", numeroIngresado);
 				system("pause");
 			}else{
 				/* Transformo el numero a entero */
@@ -139,8 +136,8 @@ int obtenerNumeroRango(char mensaje[], char mensajeError[], int minimo, int maxi
 					resultado = 1;
 				}
 			}
-		}
-		while(!resultado || numeroValidado < minimo || numeroValidado > maximo);
+
+		}while(!resultado || numeroValidado < minimo || numeroValidado > maximo);
 	}
 
 	return numeroValidado;
